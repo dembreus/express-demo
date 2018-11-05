@@ -1,16 +1,24 @@
 const Joi = require("joi");
+const logger = require("./logger");
+const authenticator = require("./authenticator");
 
 // Build a web server
 const express = require("express");
 const app = express();
 
 app.use(express.json());
+// // app.use(express.urlencoded());
+
+// app.use(logger);
+
+// app.use(authenticator);
 
 const courses = [
   { id: 1, name: "course1" },
   { id: 2, name: "course2" },
   { id: 3, name: "course3" }
 ];
+
 app.get("/", (req, res) => {
   res.send("Hello World!!!");
 });
@@ -24,12 +32,17 @@ app.post("/api/courses", (req, res) => {
     id: courses.length + 1,
     name: req.body.name
   };
+  console.log("request body", req.body);
+
   courses.push(course);
+
   res.send(course);
 });
 
 // Getting all the courses
 app.get("/api/courses", (req, res) => {
+  console.log("request body", req.body);
+
   res.send(courses);
 });
 
@@ -51,6 +64,8 @@ app.put("/api/courses/:id", (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   course.name = req.body.name;
+  console.log("request body", req.body);
+
   res.send(course);
 });
 
